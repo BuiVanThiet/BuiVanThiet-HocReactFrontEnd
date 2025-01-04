@@ -1,10 +1,9 @@
 import React from 'react';
 import ChildCompoment from './ChildCompoment';
+import AddComponent from './AddComponent';
 
 class MyComponent extends React.Component {
     state = {
-        firtName: '1',
-        lastName: '2',
         videos: [
             { id: 1, nameVideo: 'video1', view: 12222 },
             { id: 2, nameVideo: 'video2', view: 12221 },
@@ -12,34 +11,38 @@ class MyComponent extends React.Component {
         ]
     }
 
-    handleChangeFirtName = (event) => {
+    addNewVideo = (video) => {
+        let currenVideo = this.state.videos;
+        currenVideo.push(video);
         this.setState({
-            firtName: event.target.value
+            ///... la toan tu coppy
+            // videos: [...this.state.videos, video]
+            videos: currenVideo
         })
+        console.log(video)
     }
 
-    handleChangeLastName = (event) => {
+    deleteVideo = (video) => {
+        let currenVideo = this.state.videos;
+        currenVideo = currenVideo.filter(item => item.id !== video.id)
         this.setState({
-            lastName: event.target.value
+            videos: currenVideo
         })
+        console.log(currenVideo)
+
     }
-    handleSubmit = () => {
-        const { firtName, lastName } = this.state;
-        alert(`du lieu state: ${firtName} + ${lastName}`); // Sử dụng template string
-        console.log('du lieu state: ', firtName, '+', lastName);
-    }
+
 
     render() {
         return (
             <React.Fragment>
-                <form>
-                    <label>First name:</label><br />
-                    <input type="text" value={this.state.firtName} onChange={(event) => this.handleChangeFirtName(event)} /><br />
-                    <label>Last name:</label><br />
-                    <input type="text" value={this.state.lastName} onChange={(event) => this.handleChangeLastName(event)} /><br /><br />
-                    <input type="button" value="Submit" onClick={() => this.handleSubmit()} />
-                </form>
-                <ChildCompoment name={this.state.firtName} videos={this.state.videos} />
+                <AddComponent
+                    addNewVideo={this.addNewVideo}
+                />
+                <ChildCompoment
+                    videos={this.state.videos}
+                    deleteVideo={this.deleteVideo}
+                />
             </React.Fragment>
             // <div className="ash">
             //     <h1>Chao moi nguoi, minh la {name} </h1>
