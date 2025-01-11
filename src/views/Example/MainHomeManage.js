@@ -9,47 +9,53 @@ import {
     VideoCameraOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
-
+import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
+import ListTodo from '../todos/ListTodo';
+import MyComponent from './MyComponent';
+import ListUser from '../user/ListUser';
 
 const { Header, Sider, Content } = Layout;
 
-const MainHomeManage: React.FC = () => {
+const MainHomeManage = () => {
     const [collapsed, setCollapsed] = useState(false);
+    const location = useLocation();  // Sử dụng useLocation để lấy thông tin đường dẫn hiện tại
+
+    const toggleCollapsed = () => {
+        setCollapsed(!collapsed);
+    };
+
+    // Lấy đường dẫn hiện tại từ location.pathname
+    const selectedKey = location.pathname;
 
     return (
         <Layout>
             <Sider trigger={null} collapsible collapsed={collapsed}>
-                <div className="logo" >98 Sneaker</div>
+                <div className="logo">98 Sneaker</div>
                 <Menu
                     theme="dark"
                     mode="inline"
-                    defaultSelectedKeys={['1']}
-                    items={[
-                        {
-                            key: '1',
-                            icon: <UserOutlined />,
-                            label: 'nav 1',
-                        },
-                        {
-                            key: '2',
-                            icon: <VideoCameraOutlined />,
-                            label: 'nav 2',
-                        },
-                        {
-                            key: '3',
-                            icon: <UploadOutlined />,
-                            label: 'nav 3',
-                        },
-
-                    ]}
-                />
+                    selectedKeys={[selectedKey]}  // Cập nhật selectedKeys dựa trên location.pathname
+                >
+                    <Menu.Item key="/todo/home" icon={<UserOutlined />}>
+                        <Link to="/todo/home">Todo CRUD</Link>
+                    </Menu.Item>
+                    <Menu.Item key="/video/home" icon={<VideoCameraOutlined />}>
+                        <Link to="/video/home">Video CRUD</Link>
+                    </Menu.Item>
+                    <Menu.Item key="/user/home" icon={<UploadOutlined />}>
+                        <Link to="/user/home">User</Link>
+                    </Menu.Item>
+                </Menu>
             </Sider>
             <Layout className="site-layout">
                 <Header className="site-layout-background" style={{ padding: 0 }}>
-                    {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-                        className: 'trigger',
-                        onClick: () => setCollapsed(!collapsed),
-                    })}
+                    {React.createElement(
+                        collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+                        {
+                            className: 'trigger',
+                            onClick: toggleCollapsed,
+                        }
+                    )}
                 </Header>
                 <Content
                     className="site-layout-background"
@@ -59,11 +65,23 @@ const MainHomeManage: React.FC = () => {
                         minHeight: 1280,
                     }}
                 >
-                    Content
+                    <Routes>
+                        <Route path="/todo/home" element={<ListTodo />} />
+                        <Route path="/video/home" element={<MyComponent />} />
+                        <Route path="/user/home" element={<ListUser />} />
+                    </Routes>
                 </Content>
             </Layout>
         </Layout>
     );
 };
 
-export default MainHomeManage;
+const App = () => {
+    return (
+        <BrowserRouter>  {/* Đảm bảo BrowserRouter bao bọc toàn bộ ứng dụng */}
+            <MainHomeManage />
+        </BrowserRouter>
+    );
+};
+
+export default App;

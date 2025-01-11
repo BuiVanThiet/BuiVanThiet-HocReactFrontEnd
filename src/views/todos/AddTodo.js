@@ -1,5 +1,6 @@
 import react from "react";
 import { toast } from 'react-toastify';
+import { Button, Input, Select, Space } from 'antd';
 
 class AddTodo extends react.Component {
     state = {
@@ -49,10 +50,14 @@ class AddTodo extends react.Component {
         let { title } = this.state;
         return (
             <>
-                <div className='add-todo'>
-                    <input type='text' value={title} onChange={(event) => this.handleOnchangeTitle(event)} />
-                    <button onClick={() => this.handleClickAddTodo()}>Add</button>
-                </div>
+                <Space.Compact style={{ width: '100%' }}>
+                    <Input type='text' value={title} onChange={(event) => this.handleOnchangeTitle(event)} />
+                    <Button type="button" onClick={() => this.handleClickAddTodo()}>Submit</Button>
+                </Space.Compact>
+                {/* <div className='add-todo'>
+                    <Input type='text' value={title} onChange={(event) => this.handleOnchangeTitle(event)} />
+                    <Button onClick={() => this.handleClickAddTodo()}>Add</Button>
+                </div> */}
             </>
         )
     }
