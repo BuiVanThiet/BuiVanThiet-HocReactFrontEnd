@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { Table, Space, Button, Input, Pagination } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import { Link, useLocation } from 'react-router-dom';
 
 class ListUser extends React.Component {
 
@@ -48,9 +49,9 @@ class ListUser extends React.Component {
         {
             title: 'Actions',
             key: 'actions',
-            render: (_, todo) => (
+            render: (_, user) => (
                 <Space size="middle">
-                    <Button type="link">Save</Button>
+                    <Button type="link"><Link to={`/user/detail/${user.id}`}>Detail</Link></Button>
                     <Button type="link">Edit</Button>
                     <Button type="link" danger>Delete</Button>
                 </Space>

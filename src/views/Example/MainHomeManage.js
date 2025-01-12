@@ -13,19 +13,28 @@ import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-do
 import ListTodo from '../todos/ListTodo';
 import MyComponent from './MyComponent';
 import ListUser from '../user/ListUser';
+import UserDetail from '../user/UserDetail';
 
 const { Header, Sider, Content } = Layout;
 
 const MainHomeManage = () => {
     const [collapsed, setCollapsed] = useState(false);
-    const location = useLocation();  // Sử dụng useLocation để lấy thông tin đường dẫn hiện tại
+    const location = useLocation(); // Lấy thông tin đường dẫn hiện tại
 
     const toggleCollapsed = () => {
         setCollapsed(!collapsed);
     };
 
-    // Lấy đường dẫn hiện tại từ location.pathname
-    const selectedKey = location.pathname;
+    // Tìm key phù hợp với URL hiện tại
+    const getSelectedKey = () => {
+        const path = location.pathname;
+        if (path.startsWith('/todo')) return '/todo/home';
+        if (path.startsWith('/video')) return '/video/home';
+        if (path.startsWith('/user')) return '/user/home';
+        return ''; // Nếu không khớp, không chọn item nào
+    };
+
+    const selectedKey = getSelectedKey();
 
     return (
         <Layout>
@@ -34,7 +43,7 @@ const MainHomeManage = () => {
                 <Menu
                     theme="dark"
                     mode="inline"
-                    selectedKeys={[selectedKey]}  // Cập nhật selectedKeys dựa trên location.pathname
+                    selectedKeys={[selectedKey]} // Cập nhật selectedKeys dựa trên URL
                 >
                     <Menu.Item key="/todo/home" icon={<UserOutlined />}>
                         <Link to="/todo/home">Todo CRUD</Link>
@@ -69,6 +78,7 @@ const MainHomeManage = () => {
                         <Route path="/todo/home" element={<ListTodo />} />
                         <Route path="/video/home" element={<MyComponent />} />
                         <Route path="/user/home" element={<ListUser />} />
+                        <Route path="/user/detail/:id" element={<UserDetail />} />
                     </Routes>
                 </Content>
             </Layout>
@@ -78,7 +88,7 @@ const MainHomeManage = () => {
 
 const App = () => {
     return (
-        <BrowserRouter>  {/* Đảm bảo BrowserRouter bao bọc toàn bộ ứng dụng */}
+        <BrowserRouter> {/* Đảm bảo BrowserRouter bao bọc toàn bộ ứng dụng */}
             <MainHomeManage />
         </BrowserRouter>
     );
